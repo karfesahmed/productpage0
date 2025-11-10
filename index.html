@@ -416,6 +416,18 @@
                 max-width: 95vw; /* أقصى عرض 95% من شاشة الهاتف */
                 font-size: 0.85rem;
             }
+            .hero, 
+            .purchase-section, 
+            .purchase-container {
+                max-width: 100vw;
+                overflow-x: hidden; /* أي محتوى زائد يختفي */
+            }
+
+            /* تأكد أن padding أو margin لا يضيف مسافة خارج الشاشة */
+            .purchase-section, .purchase-container {
+                padding-left: 5vw;
+                padding-right: 5vw;
+            }
         }
         .floating-cta:hover {
             transform: translateY(-5px) scale(1.05);
