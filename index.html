@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Floating Shoes | Ultimate Comfort</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            transition: background 1s cubic-bezier(0.4, 0, 0.2, 1);
+            
+        }
+
+        /* Sticky Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            transition: color 0.3s ease;
+        }
+
+        nav.scrolled .logo {
+            color: #333;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled .nav-links a {
+            color: #333;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+            transition: background 1s cubic-bezier(0.4, 0, 0.2, 1);
+            touch-action: pan-y;
+        }
+        
+        .shoe-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -50px;
+            cursor: grab;
+            user-select: none;
+        }
+
+        .shoe-container:active {
+            cursor: grabbing;
+        }
+
+        .side-shoe {
+            position: absolute;
+            width: 320px;
+            opacity: 0.3;
+            filter: blur(4px) brightness(0.95);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            animation: floatSubtle 4.5s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .side-shoe.left {
+            left: -8%;
+            transform: translateX(-20%) scale(0.7) rotate(-10deg) translateZ(-100px);
+            animation-delay: 0.3s;
+        }
+
+        .side-shoe.right {
+            right: -8%;
+            transform: translateX(20%) scale(0.7) rotate(10deg) translateZ(-100px);
+            animation-delay: 0.6s;
+        }
+
+        /* Subtle pulsing effect to hint at interactivity */
+        @keyframes pulseHint {
+            0%, 100% { opacity: 0.3; transform: translateX(-20%) scale(0.7) rotate(-10deg); }
+            50% { opacity: 0.4; transform: translateX(-22%) scale(0.72) rotate(-10deg); }
+        }
+
+        @keyframes pulseHintRight {
+            0%, 100% { opacity: 0.3; transform: translateX(20%) scale(0.7) rotate(10deg); }
+            50% { opacity: 0.4; transform: translateX(22%) scale(0.72) rotate(10deg); }
+        }
+
+        .side-shoe.left {
+            animation: pulseHint 3s ease-in-out infinite;
+        }
+
+        .side-shoe.right {
+            animation: pulseHintRight 3s ease-in-out infinite;
+        }
+
+        .main-shoe {
+            width: 500px;
+            max-width: 85vw;
+            animation: floatSubtle 4s ease-in-out infinite;
+            filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.3));
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes floatSubtle {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Product Info - Below shoe */
+        .product-info {
+            text-align: center;
+            color: #fff;
+            z-index: 10;
+            margin-top: 2rem;
+        }
+
+        .product-title {
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-price {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            opacity: 0.95;
+        }
+
+        /* Color Indicators */
+        .color-dots {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .color-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .color-dot:hover {
+            transform: scale(1.2);
+        }
+
+        .color-dot.active {
+            transform: scale(1.4);
+            border-color: #fff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .scroll-arrow {
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Purchase Section */
+        .purchase-section {
+            min-height: 100vh;
+            padding: 4rem 5% 8rem 5%;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .purchase-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .purchase-container {
+            max-width: 750px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+            color: #555;
+            font-size: 1rem;
+        }
+
+        /* Color Selector */
+        .color-selector {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 55px;
+            height: 55px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .color-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-option.selected {
+            border-color: #333;
+            transform: scale(1.1);
+        }
+
+        /* Size Selector - Compact Row */
+        .size-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 0.8rem;
+            max-width: 100%;
+        }
+
+        .size-option {
+            padding: 0.9rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            background: #fff;
+            text-align: center;
+        }
+
+        .size-option:hover {
+            border-color: #4A90E2;
+            transform: translateY(-3px);
+        }
+
+        .size-option.selected {
+            background: #4A90E2;
+            color: #fff;
+            border-color: #4A90E2;
+        }
+
+        /* Form Inputs */
+        input[type="text"],
+        input[type="tel"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.9rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #4A90E2;
+            box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Quantity Control */
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .qty-btn {
+            width: 45px;
+            height: 45px;
+            border: 2px solid #4A90E2;
+            background: #fff;
+            color: #4A90E2;
+            border-radius: 10px;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: bold;
+        }
+
+        .qty-btn:hover {
+            background: #4A90E2;
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        .qty-display {
+            font-size: 1.4rem;
+            font-weight: bold;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        /* Side by Side Layout for Wilaya/Baladiya */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Sticky Floating CTA Button */
+        .floating-cta {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+            animation: vibrate 3s infinite;
+            padding: 1rem 1.8rem; /* تقليل البادينغ لتجنب الخروج من الشاشة */
+            max-width: 90vw; /* عرض الزر لن يتجاوز 90% من الشاشة */
+
+            white-space: nowrap; /* هذا الجديد */
+            overflow: hidden;   /* هذا الجديد */
+        }
+        @media (max-width: 480px) {
+            .floating-cta {
+                padding: 0.5rem 1rem;
+                bottom: 10px;
+                right: 10px;
+                max-width: 95vw; /* أقصى عرض 95% من شاشة الهاتف */
+                font-size: 0.85rem;
+            }
+        }
+        .floating-cta:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.7);
+            animation: none;
+        }
+
+        @keyframes vibrate {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+            20%, 40%, 60%, 80% { transform: translateX(2px); }
+        }
+
+        /* Theme Colors */
+        .theme-blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .theme-pink { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .theme-black { background: linear-gradient(135deg, #434343 0%, #000000 100%); }
+        .theme-white { background: linear-gradient(135deg, #e0e0e0 0%, #f8f9fa 100%); }
+
+        .color-blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .color-pink { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .color-black { background: linear-gradient(135deg, #434343 0%, #000000 100%); }
+        .color-white { background: linear-gradient(135deg, #e0e0e0 0%, #f8f9fa 100%); }
+
+        /* Dynamic Button Glow */
+        .btn-glow-blue { box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5); }
+        .btn-glow-pink { box-shadow: 0 10px 30px rgba(240, 147, 251, 0.5); }
+        .btn-glow-black { box-shadow: 0 10px 30px rgba(67, 67, 67, 0.5); }
+        .btn-glow-white { box-shadow: 0 10px 30px rgba(200, 200, 200, 0.5); }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .product-title {
+                font-size: 2rem;
+            }
+
+            .product-price {
+                font-size: 1.5rem;
+            }
+
+            .main-shoe {
+                width: 320px;
+            }
+
+            .side-shoe {
+                width: 220px;
+            }
+
+            .side-shoe.left {
+                left: -15%;
+            }
+
+            .side-shoe.right {
+                right: -15%;
+            }
+
+            .purchase-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .floating-cta {
+                bottom: 15px;
+                right: 15px;
+                left: 15px;
+                padding: 1rem 2rem;
+                font-size: 1.1rem;
+            }
+
+            .size-selector {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .shoe-container {
+                height: 350px;
+            }
+
+            .main-shoe {
+                width: 280px;
+            }
+
+            .side-shoe {
+                width: 180px;
+                opacity: 0.25;
+            }
+
+            .side-shoe.left {
+                left: -20%;
+            }
+
+            .side-shoe.right {
+                right: -20%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="logo">SHOES</div>
+        <ul class="nav-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#purchase">Shop</a></li>
+            <li><a href="#purchase">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero theme-blue" id="hero">
+        <div class="shoe-container" id="shoeContainer">
+            <img src="img2.png" alt="Left Shoe" class="side-shoe left" id="leftShoe">
+            <img src="img1.png" alt="Main Shoe" class="main-shoe" id="mainShoe">
+            <img src="img3.png" alt="Right Shoe" class="side-shoe right" id="rightShoe">
+        </div>
+
+        <div class="product-info">
+            <h1 class="product-title">Air Comfort Pro</h1>
+            <p class="product-price">$129.99</p>
+            <div class="color-dots" id="colorDots">
+                <div class="color-dot color-blue active" data-index="0"></div>
+                <div class="color-dot color-pink" data-index="1"></div>
+                <div class="color-dot color-black" data-index="2"></div>
+                <div class="color-dot color-white" data-index="3"></div>
+            </div>
+        </div>
+
+        <div class="scroll-indicator">
+            <div class="scroll-arrow">↓</div>
+        </div>
+    </section>
+
+    <!-- Purchase Section -->
+    <section class="purchase-section" id="purchase">
+        <div class="purchase-container">
+            <h2 class="section-title">Complete Your Order</h2>
+            
+            <form id="orderForm">
+                <!-- Color Selection -->
+                <div class="form-group">
+                    <label>Choose Color</label>
+                    <div class="color-selector">
+                        <div class="color-option color-blue selected" data-color="Blue"></div>
+                        <div class="color-option color-pink" data-color="Pink"></div>
+                        <div class="color-option color-black" data-color="Black"></div>
+                        <div class="color-option color-white" data-color="White"></div>
+                    </div>
+                </div>
+
+                <!-- Size Selection -->
+                <div class="form-group">
+                    <label>Select Size</label>
+                    <div class="size-selector">
+                        <div class="size-option" data-size="38">38</div>
+                        <div class="size-option" data-size="39">39</div>
+                        <div class="size-option" data-size="40">40</div>
+                        <div class="size-option" data-size="41">41</div>
+                        <div class="size-option" data-size="42">42</div>
+                        <div class="size-option" data-size="43">43</div>
+                        <div class="size-option" data-size="44">44</div>
+                    </div>
+                </div>
+
+                <!-- Quantity -->
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <div class="quantity-control">
+                        <button type="button" class="qty-btn" id="decreaseQty">−</button>
+                        <span class="qty-display" id="qtyDisplay">1</span>
+                        <button type="button" class="qty-btn" id="increaseQty">+</button>
+                    </div>
+                </div>
+
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="Enter your full name" required>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" placeholder="Enter your phone number" required>
+                </div>
+
+                <!-- Wilaya & Baladiya Side by Side -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Wilaya</label>
+                        <select required>
+                            <option value="">Select Wilaya</option>
+                            <option value="Algiers">Algiers</option>
+                            <option value="Oran">Oran</option>
+                            <option value="Constantine">Constantine</option>
+                            <option value="Annaba">Annaba</option>
+                            <option value="Blida">Blida</option>
+                            <option value="Batna">Batna</option>
+                            <option value="Setif">Setif</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Baladiya</label>
+                        <select required>
+                            <option value="">Select Baladiya</option>
+                            <option value="City Center">City Center</option>
+                            <option value="North District">North District</option>
+                            <option value="South District">South District</option>
+                            <option value="East District">East District</option>
+                            <option value="West District">West District</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Floating CTA Button -->
+    <button class="floating-cta btn-glow-blue" id="floatingCta">Order Now 🚀</button>
+
+    <script>
+        // Shoe data
+        const shoes = [
+            { img: 'img1.png', theme: 'theme-blue', name: 'Air Comfort Pro', price: '$129.99', glow: 'btn-glow-blue' },
+            { img: 'img2.png', theme: 'theme-pink', name: 'Pink Dream Elite', price: '$139.99', glow: 'btn-glow-pink' },
+            { img: 'img3.png', theme: 'theme-black', name: 'Shadow Runner', price: '$149.99', glow: 'btn-glow-black' },
+            { img: 'img4.png', theme: 'theme-white', name: 'Cloud Walker', price: '$134.99', glow: 'btn-glow-white' }
+        ];
+
+        let currentIndex = 0;
+        let quantity = 1;
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        // Elements
+        const hero = document.querySelector('.hero');
+        const mainShoe = document.getElementById('mainShoe');
+        const leftShoe = document.getElementById('leftShoe');
+        const rightShoe = document.getElementById('rightShoe');
+        const shoeContainer = document.getElementById('shoeContainer');
+        const productTitle = document.querySelector('.product-title');
+        const productPrice = document.querySelector('.product-price');
+        const colorDots = document.querySelectorAll('.color-dot');
+        const navbar = document.getElementById('navbar');
+        const purchaseSection = document.querySelector('.purchase-section');
+        const floatingCta = document.getElementById('floatingCta');
+
+        // Update shoe display with smooth transition
+        function updateShoe(index, animate = true) {
+            if (animate) {
+                mainShoe.style.opacity = '0';
+                leftShoe.style.opacity = '0';
+                rightShoe.style.opacity = '0';
+                mainShoe.style.transform = 'scale(0.9) translateY(10px)';
+            }
+
+            setTimeout(() => {
+                currentIndex = index;
+                const current = shoes[currentIndex];
+                const prev = shoes[(currentIndex - 1 + shoes.length) % shoes.length];
+                const next = shoes[(currentIndex + 1) % shoes.length];
+
+                mainShoe.src = current.img;
+                leftShoe.src = prev.img;
+                rightShoe.src = next.img;
+
+                hero.className = 'hero ' + current.theme;
+                productTitle.textContent = current.name;
+                productPrice.textContent = current.price;
+
+                // Update floating button glow
+                floatingCta.className = 'floating-cta ' + current.glow;
+
+                colorDots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentIndex);
+                });
+
+                if (animate) {
+                    setTimeout(() => {
+                        mainShoe.style.opacity = '1';
+                        leftShoe.style.opacity = '0.35';
+                        rightShoe.style.opacity = '0.35';
+                        mainShoe.style.transform = 'scale(1) translateY(0)';
+                    }, 50);
+                }
+            }, animate ? 250 : 0);
+        }
+
+        // Touch/Swipe handlers
+        shoeContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        shoeContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        // Mouse drag handlers
+        let isDragging = false;
+        let dragStartX = 0;
+
+        shoeContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            dragStartX = e.clientX;
+        });
+
+        shoeContainer.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const diff = e.clientX - dragStartX;
+                if (Math.abs(diff) > 5) {
+                    mainShoe.style.transform = `translateX(${diff * 0.3}px)`;
+                }
+            }
+        });
+
+        shoeContainer.addEventListener('mouseup', (e) => {
+            if (isDragging) {
+                const diff = e.clientX - dragStartX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) {
+                        updateShoe((currentIndex - 1 + shoes.length) % shoes.length);
+                    } else {
+                        updateShoe((currentIndex + 1) % shoes.length);
+                    }
+                }
+                mainShoe.style.transform = 'translateX(0)';
+                isDragging = false;
+            }
+        });
+
+        shoeContainer.addEventListener('mouseleave', () => {
+            if (isDragging) {
+                mainShoe.style.transform = 'translateX(0)';
+                isDragging = false;
+            }
+        });
+
+        function handleSwipe() {
+            const swipeDistance = touchEndX - touchStartX;
+            if (Math.abs(swipeDistance) > 50) {
+                if (swipeDistance > 0) {
+                    updateShoe((currentIndex - 1 + shoes.length) % shoes.length);
+                } else {
+                    updateShoe((currentIndex + 1) % shoes.length);
+                }
+            }
+        }
+
+        // Color dot navigation
+        colorDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => updateShoe(index));
+        });
+
+        // Subtle parallax on mouse move
+        hero.addEventListener('mousemove', (e) => {
+            if (!isDragging) {
+                const x = (e.clientX / window.innerWidth - 0.5) * 15;
+                const y = (e.clientY / window.innerHeight - 0.5) * 15;
+                mainShoe.style.transform = `translate(${x}px, ${y}px)`;
+            }
+        });
+
+        hero.addEventListener('mouseleave', () => {
+            if (!isDragging) {
+                mainShoe.style.transform = 'translate(0, 0)';
+            }
+        });
+
+        // Sticky navbar
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            const purchaseTop = purchaseSection.getBoundingClientRect().top;
+            if (purchaseTop < window.innerHeight * 0.8) {
+                purchaseSection.classList.add('visible');
+            }
+        });
+
+        // Color selection
+        document.querySelectorAll('.color-selector .color-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.color-selector .color-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Size selection
+        document.querySelectorAll('.size-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.size-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Quantity control
+        document.getElementById('decreaseQty').addEventListener('click', () => {
+            if (quantity > 1) {
+                quantity--;
+                document.getElementById('qtyDisplay').textContent = quantity;
+            }
+        });
+
+        document.getElementById('increaseQty').addEventListener('click', () => {
+            quantity++;
+            document.getElementById('qtyDisplay').textContent = quantity;
+        });
+
+        // Floating CTA
+        floatingCta.addEventListener('click', () => {
+            const selectedColor = document.querySelector('.color-selector .color-option.selected')?.dataset.color;
+            const selectedSize = document.querySelector('.size-option.selected')?.dataset.size;
+            
+            if (!selectedColor || !selectedSize) {
+                alert('Please select color and size');
+                document.getElementById('purchase').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+            
+            alert(`Order placed!\nShoe: ${productTitle.textContent}\nColor: ${selectedColor}\nSize: ${selectedSize}\nQuantity: ${quantity}`);
+        });
+
+        // Initialize
+        updateShoe(0, false);
+    </script>
+</body>
+</html>
